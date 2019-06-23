@@ -1,0 +1,55 @@
+\ProvidesPackage{srs-library}
+
+\RequirePackage{amsmath}				% Import mathematics.
+\RequirePackage{amssymb}				% Import mathematical symbols
+\RequirePackage[english]{babel}         % Support for English features like quotation marks.
+\RequirePackage{enumitem}              % Allow custom enum styles.
+\RequirePackage{fancyhdr}               % Allow the creation of formatted headers.
+\RequirePackage{graphicx}               % Import graphics features.
+\RequirePackage{titlesec}               % Enable reformatting for chapter titles.
+\RequirePackage[top = 1in, bottom = 1in, left = .5in, right = .5in]{geometry}
+
+% Use 5 blank spaces for a tab shortcut.
+\def \tab{\ \ \ \ \ }
+
+% Define the CODE command for in-line code segments.
+\newcommand{\code}[1]
+{
+	\!\!\texttt{#1}\!\!
+}
+
+% Change bulleting styles for itemized lists.
+\renewcommand{\labelitemii}{\ensuremath{\circ}}
+\renewcommand{\labelitemiii}{\tiny{\ensuremath{\blacksquare}}}
+\renewcommand{\labelitemiv}{\tiny{\ensuremath{\square}}}
+
+% Creates a new style of list suited for enumerating requirements.
+\newenvironment{reqlist}{
+	\renewcommand{\labelenumi}{\tab\thesubsection.\arabic{enumi}}
+	\renewcommand{\labelenumii}{\thesubsection.\arabic{enumi}.\arabic{enumii}}
+	\renewcommand{\labelenumiii}{\thesubsection.\arabic{enumi}.\arabic{enumii}.\arabic{enumiii}}
+	\begin{enumerate}[itemsep = 1pt, parsep = 0pt, leftmargin = *]
+}{\end{enumerate}}
+
+% Create custom header.
+\newcommand{\header}[3]
+{
+	\pagestyle{fancy}
+	\renewcommand{\headrulewidth}{0.4pt}
+	\fancyhead[L]{#1}
+	\fancyhead[C]{#2}
+	\fancyhead[R]{#3}
+}
+
+% Remove all the excessive space from the chapter headers (such as ToC).
+\titleformat{\chapter}[display]   
+{\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{20pt}{\Huge}   
+\titlespacing*{\chapter}{0pt}{-50pt}{40pt}
+
+% Remove chapter number from sections.
+\renewcommand*\thesection{\arabic{section}}
+
+% Setup fonts.
+\font\titlefont = cmr12 at 50pt
+\font\subtitlefont = cmr12 at 28pt
+\font\authorfont = cmr12 at 18pt

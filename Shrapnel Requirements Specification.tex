@@ -1,0 +1,297 @@
+\documentclass[12pt]{report}
+\usepackage{srs-library}
+
+% Unjustify document text.
+\usepackage[document]{ragged2e}
+
+\begin{document}
+
+% Create Header.
+\header{Shrapnel Requirements Specification}{}{Dan Jones}
+
+% Create Title Page.
+\title{\titlefont{Shrapnel} \\ \vspace{10pt} \subtitlefont{Requirements Specification}}
+\author{\authorfont{Dan Jones}}
+\date{Latest Revision: \today}
+\maketitle
+
+\tableofcontents \newpage
+
+\section{Introduction}
+	\subsection{Purpose}
+		TBA
+	\subsection{Scope}
+		The Shrapnel system, herein referred to as ``The System,'' shall consist of software intended to facilitate project management activities related to the production of software products.
+		This is achieved through the creation of backlog management features and a virtual project board.
+	\subsection{Definitions, Acronyms, and Abbreviations}
+		\begin{reqlist}
+			\item \textbf{Agile} \\ Explanation
+			\item \textbf{Backend} \\ Explanation
+			\item \textbf{Backlog} \\ Explanation
+			\item \textbf{Card} \\ Explanation
+			\item \textbf{Endpoint} \\ Explanation
+			\item \textbf{Frontend} \\ Explanation
+			\item \textbf{Issue} \\ Explanation
+			\item \textbf{Kanban} \\ Explanation
+			\item \textbf{Lean} \\ Explanation
+			\item \textbf{PII: Personally Identifiable Information} \\ Explanation
+			\item \textbf{Scrum} \\ Explanation
+			\item \textbf{Sprint} \\ Explanation
+			\item \textbf{SRS: Software Requirements Specification} \\ Explanation
+			\item \textbf{Ticket} \\ Explanation
+			\item \textbf{UI: User Interface} \\ Explanation
+			\item \textbf{Workflow} \\ Explanation
+		\end{reqlist}
+
+	\subsection{Overview}
+		The following document outlines the software requirements and specifications for The System, including the functional, nonfunctional, domain, hazard, and system requirements.
+		Requirements are organized into sections based on their applicability to more general goals such as models, controllers, and individual webpages.
+
+\section{Overall Description}
+	This section is intended to provide an overview of The System as a whole.
+	It will explain the basic functionality of The System, as well as how its various components are expected to interact with each other.
+	It will also provide some insight regarding potential users and stakeholders, and list the constraints and dependencies involved in the development and use of The System.
+	\subsection{Product Perspective}
+		TBA
+	\subsection{Product Functions}
+		TBA
+	\subsection{User Characteristics}
+		As a software project management product, The System will primarily be designed with the needs of three types of users in mind.
+		These three user categories consist of software engineers, software testers, and project managers.
+	\subsection{Constraints}
+		\begin{reqlist}
+			\item \textbf{Browser Support} \\
+				Old or outdated browsers may not offer the proper support for prerequisite technologies to properly run The System.
+				Given the variety of browsers that are either currently or previously available to the public, providing support for every version of every browser is simply not feasible.
+			\item \textbf{Hardware} \\
+				Much like the issues that can arise with antiquated browsers, older devices may not be able to meet the demands to adequately run The System due to hardware limitations.
+			\item \textbf{Internet Connection} \\
+				As a web-based product, restrictions on the user's access to the internet present constraints on The System.
+				Without some form of internet access, the user will be unable to access The System.
+		\end{reqlist}
+	\subsection{Assumptions and Dependencies}
+		\begin{reqlist}
+			\item The user's browser is reasonably modern and able to adequately support contemporary web-based applications.
+			\begin{reqlist}
+				\item The browser has been updated at least once within the past year.
+				\item The browser is able to support React components.
+			\end{reqlist}
+			\item The user's browser is not actively blocking scripts that may interfere with the operation of The System via an extension.
+			\item The user's device is equipped with hardware to adequately support temporary software applications.
+			\begin{reqlist}
+				\item The device has a CPU containing at least two cores.
+				\item The device has at least 1GB of RAM.
+			\end{reqlist}
+			\item The user has an internet connection stable enough to support basic REST operations within a reasonable amount of time.
+			\begin{reqlist}
+				\item A ``reasonable amont of time" shall be defined as a time period less than or equal to 2 seconds.
+			\end{reqlist}
+		\end{reqlist}
+
+\section{User/Stakeholder Profiles}
+	TBA
+
+\section{Core System Requirements}
+	This section lists all of the core functional requirements pertaining to the system.
+
+\section{Backend Requirements}
+	\subsection{Models}
+		\begin{reqlist}
+			\item The System shall verify the number of attributes present in each model as an additional safeguard to ensure every model is thoroughly tested in the event that attributes are added or removed.
+			\item The System shall include an Issue model.
+			\begin{reqlist}
+				\item The Issue model shall include an identifier obtained by concatenating the parent project's ID with the issue's generated ID, separated by a hyphen (e.g., SHRP-1 for Shrapnel's first issue).
+				\begin{reqlist}
+					\item The issue ID shall be immutable.
+				\end{reqlist}
+				\item The Issue model shall include an \code{issue\_type} attribute. \label{item:test}
+				\begin{reqlist}
+					\item The attribute shall be of the enum type IssueType.
+					\item The attribute shall be required.
+				\end{reqlist}
+				\item The Issue model shall include a \code{subject} attribute.
+				\begin{reqlist}
+					\item The attribute shall be of type string.
+					\item The attribute shall be required.
+				\end{reqlist}
+				\item The Issue model shall include a \code{description} attribute.
+				\begin{reqlist}
+					\item The attribute shall be of type string (text for migration).
+					\item The attribute shall be optional.
+				\end{reqlist}
+				\item The Issue model shall include an \code{issue\_status} attribute
+				\begin{reqlist}
+					\item The attribute shall be of the enum type IssueStatus.
+					\item The attribute shall be required.
+				\end{reqlist}
+				\item The Issue model shall include a \code{due\_date} attribute.
+				\begin{reqlist}
+					\item The attribute shall be of type date.
+					\item The attribute shall be optional.
+					\item The attribute shall point to a future date relative to the time of the issue's creation.
+				\end{reqlist}
+				\item The Issue model shall include an \code{assignee} attribute.
+				\begin{reqlist}
+					\item The attribute shall be of type string.
+					\item The attribute shall be optional.
+				\end{reqlist}
+				\item The Issue model shall include the default \code{timestamps} attributes offered by Rails.
+			\end{reqlist}
+		\end{reqlist}
+	\subsection{Controllers}
+		\begin{reqlist}
+			\item The System shall include an Issue Controller.
+				\begin{reqlist}
+					\item The Issue Controller shall implement a \code{GET} endpoint.
+					\begin{reqlist}
+						\item The endpoint's request shall not require a request body.
+						\item The endpoint's response shall return a \code{200} status code when successful.
+						\item The endpoint's response shall return a \code{403} status code when the user is not authorized to access the project.
+						\item The endpoint's response shall return a \code{404} status code when the specified project ID is not found.
+					\end{reqlist}
+					\item The Issue Controller shall implement a \code{GET:id} endpoint.
+					\begin{reqlist}
+						\item The endpoint's request shall not require a request body.
+						\item The endpoint's request shall include a URL containing an issue ID as an argument.
+						\item The endpoint's response shall return a \code{200} status code when successful.
+						\item The endpoint's response shall return a \code{403} status code when the user is not authorized to access the issue.
+						\item The endpoint's response shall return a \code{404} status code when the specified issue ID is not found.
+					\end{reqlist}
+					\item The Issue Controller shall implement a \code{POST} endpoint.
+					\begin{reqlist}
+						\item The endpoint's request shall require a request body containing, at a minimum, the required attributes for the Issue model.
+						\item The endpoint's response shall return a \code{201} status code when successful.
+						\item The endpoint's response shall return a \code{400} status code when required attributes are not included in the request.
+						\item The endpoint's response shall return a \code{403} status code when the user is not authorized to create the issue.
+						\item The endpoint's response shall return a \code{409} status code when the issue ID already exists within the project.
+					\end{reqlist}
+					\item The Issue Controller shall implement a \code{PATCH} endpoint.
+					\begin{reqlist}
+						\item The endpoint's request shall require a request body containing attributes to be updated.
+						\item The endpoint's request shall include a URL containing an issue ID as an argument.
+						\item The endpoint's response shall return a \code{202} status code when successful.
+						\item The endpoint's response shall return a \code{204} status code when the request body is empty.
+						\item The endpoint's response shall return a \code{403} status code when the user is not authorized to modify the issue.
+						\item The endpoint's response shall return a \code{404} status code when the specified issue ID is not found.
+					\end{reqlist}
+					\item The Issue Controller shall implement a \code{DELETE} endpoint.
+					\begin{reqlist}
+						\item The endpoint's request shall not require a request body.
+						\item The endpoint's request shall include a URL containing an issue ID as an argument.
+						\item The endpoint's response shall return a \code{200} status code when successful.
+						\item The endpoint's response shall return a \code{403} status code when the user is not authorized to modify the issue.
+						\item The endpoint's response shall return a \code{404} status code when the specified issue ID is not found.
+					\end{reqlist}
+				\end{reqlist}
+		\end{reqlist}
+     \subsection{Enumerations}
+		\textbf{Note:} Due to the absence of a built-in enum type in Ruby, the exact details of these implementations are not yet finalized.
+		\begin{reqlist}
+			\item The System shall include an IssueType enum to categorize issues.
+			\begin{reqlist}
+				\item The IssueType enum shall have a ``Project'' value.
+				\item The IssueType enum shall have an ``Epic'' value.
+				\item The IssueType enum shall have a ``Story'' value.
+				\item The IssueType enum shall have a ``Task'' value.
+				\item The IssueType enum shall have a ``Subtask'' value.
+				\item The IssueType enum shall have a ``Defect'' value.
+				\item The IssueType enum shall have a ``Spike'' value.
+				\item The IssueType enum shall have a ``Release'' value.
+			\end{reqlist}
+			\item The System shall include an IssueStatus enum to differentiate issues by development phase.
+			\begin{reqlist}
+				\item The IssueStatus enum shall have a ``Backlog'' value.
+				\item The IssueStatus enum shall have an ``In Progress'' value.
+				\item The IssueStatus enum shall have an ``In Review'' value.
+				\item The IssueStatus enum shall have a ``Testing'' value.
+				\item The IssueStatus enum shall have a ``Done'' value.
+			\end{reqlist}
+		\end{reqlist}
+\section{Frontend Requirements}
+	\subsection{Issue View}
+		\begin{reqlist}
+			\item The Issue View shall display all attributes of the specified issue.
+			\item The Issue View shall allow the user to assign an issue to any member of a project.
+			\item The Issue View shall allow the user to move the issue to the next phase of the project workflow.
+			\item The Issue View shall allow the user to mark an issue as blocked.
+		\end{reqlist}
+	\subsection{List View}
+		\begin{reqlist}
+			\item The List View shall display a list of all issues contained within the backlog, including both closed and open issues.
+			\item The List View shall contain a search box allowing the user to filter issues displayed in the list.
+			\begin{reqlist}
+				\item The search box shall allow the user to filter issues by issue ID.
+				\item The search box shall allow the user to filter issues by subject.
+				\item The search box shall allow the user to filter issues by description.
+				\item The search box shall allow the user to filter issues by issue type.
+				\item The search box shall allow the user to filter issues by issue status.
+				\item The search box shall allow the user to filter issues by assignee.
+				\item The search box shall allow the user to filter issues by all of the above criteria at once.
+			\end{reqlist} 
+		\end{reqlist}
+	\subsection{Board View}
+		\begin{reqlist}
+			\item The Board View shall display columns corresponding to each step of the project's workflow.
+			\begin{reqlist}
+				\item Each column shall contain a number of cards corresponding to issues in the project's backlog.
+				\begin{reqlist}
+					\item Each card shall display the corresponding issue's ID.
+					\item Each card shall display the corresponding issue's subject.
+					\item Each card shall display the corresponding issue's assignee (if any).
+					\item Each card shall contain a small, circular, red button in the top-right corner to mark the corresponding issue as blocked.
+				\end{reqlist}
+				\item Each column shall alter an issue's status when its corresponding card is dragged and dropped into it from a different column.
+			\end{reqlist}
+			\item The Board View shall have the option to organize issues by sprint ID.
+			\begin{reqlist}
+				\item Issues shall include an optional tag to represent a sprint ID.
+				\item The board shall present the option to only display issues included in a specific sprint.
+			\end{reqlist}
+		\end{reqlist}
+	\subsection{Issue Editor}
+		TBA
+\section{Accessibility Requirements}
+	\subsection{Navigation}
+		\begin{reqlist}
+			\item Hyperlinks shall be visually distinguishable from all other text within the application.
+			\begin{reqlist}
+				\item Hyperlinks shall be emphasized with an underline.
+				\item Hyperlinks shall be the only form of text emphasized with an underline.
+				\item Hyperlinks shall be styled with a color that is not used by any other text within the application.
+				\item Hyperlinks shall be visually analyzed to ensure they are appropriately contrasted with their surroundings to allow a color vision impaired individual to differentiate them from other text within the application.
+			\end{reqlist}
+			\item Webpages shall facilitate keyboard-only navigation.
+			\begin{reqlist}
+				\item The tab key shall provide the user with a logical navigation flow, generally from top-to-bottom and left-to-right on the page.
+				\item Navigation based on the tab key shall prioritize the most important or frequently used features so they are revealed more efficiently.
+				\item Modal windows shall navigate to the close button/link after the first tab key press.
+			\end{reqlist}
+		\end{reqlist}
+\section{Globalization Requirements}
+	TBA
+\section{Nonfunctional Requirements}
+	This section lists the nonfunctional requirements pertaining to the system.
+	\subsection{Programming Languages, Tools, and Dependencies}
+		\begin{reqlist}
+			\item The System shall consist of a backend implemented in Ruby.
+			\begin{reqlist}
+				\item The System shall use Rails as a web application framework.
+				\item The System shall use Bundler for dependency management.
+				\item The System shall use RSpec for testing purposes.
+				\item The System shall use RuboCop for linting purposes
+			\end{reqlist}
+			\item The System shall consist of a frontend implemented in JavaScript.
+			\begin{reqlist}
+				\item The System shall use the React library for UI building.
+				\item The System shall use Webpack for dependency management.
+				\item The System shall use Jest/Enzyme for testing purposes.
+				\item The System shall use ESLint for linting purposes.
+				\item The System shall use TypeScript to enforce strong typing.
+			\end{reqlist}
+		\end{reqlist}
+	\subsection{Regulatory}
+		\begin{reqlist}
+			\item No regulatory requirements have been identified at this time.
+		\end{reqlist}
+
+\end{document}
